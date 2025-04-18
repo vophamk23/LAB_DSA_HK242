@@ -29,14 +29,6 @@ Repository bao gồm đầy đủ các chủ đề nền tảng của môn DSA 2
 
 ---
 
-## 🎯 Mục tiêu sử dụng  
-
-- Là nơi tổng hợp và lưu trữ bài thực hành phục vụ học tập và ôn tập.  
-- Hỗ trợ sinh viên tra cứu nhanh code mẫu khi cần tham khảo.  
-- Tài nguyên mở để bạn chia sẻ với bạn học hoặc sử dụng làm nền tảng cho đồ án sau này.
-
----
-
 ## 💾 Hướng dẫn sử dụng  
 
 1. Chọn thư mục tương ứng với chủ đề bạn cần tìm.  
@@ -44,17 +36,6 @@ Repository bao gồm đầy đủ các chủ đề nền tảng của môn DSA 2
 3. Tải repository về máy bằng lệnh:
 
 ```bash
-git clone https://github.com/ten-cua-ban/ten-repo.git
+git clone https://github.com/vophamk23/LAB_DSA_HK242.git
 ```
 
----
-
-## 📌 Ghi chú  
-
-- Toàn bộ code được viết bằng **C++ chuẩn**, chú thích rõ ràng, dễ đọc và dễ tùy chỉnh.  
-- Các file PDF được dùng làm tài liệu tham khảo nội bộ.  
-- Repository phục vụ mục đích học tập cá nhân, không sử dụng cho thương mại.
-
----
-
-Nếu bạn muốn, mình có thể tạo sẵn **table of contents dạng nhấn được** ở đầu README, hoặc thêm phần **tóm tắt từng bài lab ngắn gọn** luôn cho. Bạn muốn mình làm thêm không? 😄
