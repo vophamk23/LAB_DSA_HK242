@@ -104,7 +104,11 @@ public:
             return 0;
         return getHeightRec(subroot->pLeft) - getHeightRec(subroot->pRight);
     }
-    // Hàm rotateLeft: Thực hiện quay trái một node trong cây AVL
+
+    // Hàm rotateLeft: Thực hiện quay trái một node trong cây AVL khi Cây và Cây con Phải lệch Phải
+    // subroot là node gốc của cây con cần quay
+    // Hàm này sẽ thay đổi cấu trúc của cây để đảm bảo tính cân bằng của cây AVL
+    // Right of Right (RR) imbalance
     Node *rotateLeft(Node *subroot)
     {
         // Kiểm tra xem subroot có tồn tại hay không
@@ -132,7 +136,10 @@ public:
         return newRoot;
     }
 
-    // Hàm rotateRight: Thực hiện quay phải một node trong cây AVL
+    // Hàm rotateRight: Thực hiện quay phải một node trong cây AVL khi cây và cây con trái lệch trái
+    // subroot là node gốc của cây con cần quay
+    // Hàm này sẽ thay đổi cấu trúc của cây để đảm bảo tính cân bằng của cây AVL
+    // Left of Left (LL) imbalance
     Node *rotateRight(Node *subroot)
     {
         // Kiểm tra xem subroot có tồn tại hay không
@@ -160,6 +167,40 @@ public:
         return newRoot;
     }
 
+    // Hàm rotateLeftRight: Thực hiện quay trái rồi quay phải một node trong cây AVL
+    // Cây Cây lệch Trái và Cây con Trai lệch Phải
+    // subroot là node gốc của cây con cần quay
+    // Hàm này sẽ thay đổi cấu trúc của cây để đảm bảo tính cân bằng của cây AVL
+    // Right of Left (RL) imbalance
+    Node *rotateLeftRight(Node *subroot)
+    {
+        // Kiểm tra xem subroot có tồn tại hay không
+        if (subroot == nullptr)
+            return nullptr;
+
+        // Thực hiện quay trái trước
+        subroot->pLeft = rotateLeft(subroot->pLeft);
+
+        // Sau đó thực hiện quay phải
+        return rotateRight(subroot);
+    }
+    // Hàm rotateRightLeft: Thực hiện quay phải rồi quay trái một node trong cây AVL
+    // Cây Cây lệch Phải và Cây con Phải lệch Trái
+    // subroot là node gốc của cây con cần quay
+    // Hàm này sẽ thay đổi cấu trúc của cây để đảm bảo tính cân bằng của cây AVL
+    // Left of Right (LR) imbalance
+    Node *rotateRightLeft(Node *subroot)
+    {
+        // Kiểm tra xem subroot có tồn tại hay không
+        if (subroot == nullptr)
+            return nullptr;
+
+        // Thực hiện quay phải trước
+        subroot->pRight = rotateRight(subroot->pRight);
+
+        // Sau đó thực hiện quay trái
+        return rotateLeft(subroot);
+    }
     /*
     CHÚ THÍCH CHI TIẾT:
 

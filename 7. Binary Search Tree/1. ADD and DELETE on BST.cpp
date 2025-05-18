@@ -30,6 +30,69 @@ public:
         Node(T value) : value(value), pLeft(NULL), pRight(NULL) {}
         ~Node() {}
     };
+
+    /*
+     * Hàm đệ quy để tìm kiếm một giá trị trong cây Nhị phân tìm kiếm
+     * @param node: Nút đang xét
+     * @param value: Giá trị cần tìm
+     * @return con trỏ đến nút chứa giá trị nếu tìm thấy, nullptr nếu không tìm thấy
+     */
+    Node *searchRec(Node *node, T value)
+    {
+        // Nếu cây rỗng hoặc đã tìm thấy giá trị
+        if (node == nullptr || node->value == value)
+        {
+            return node; // Trả về nút hiện tại
+        }
+
+        // Nếu giá trị nhỏ hơn giá trị của nút hiện tại, tìm trong cây con bên trái
+        if (value < node->value)
+        {
+            return searchRec(node->pLeft, value);
+        }
+        // Nếu giá trị lớn hơn giá trị của nút hiện tại, tìm trong cây con bên phải
+        else
+        {
+            return searchRec(node->pRight, value);
+        }
+    }
+
+    // Ham them khong de quy
+    Node *interative_Add(Node *node, T value)
+    {
+        Node *newNode = new Node(value);
+        if (node == nullptr)
+        {
+            return newNode;
+        }
+        Node *current = node;
+        Node *parent = nullptr;
+
+        while (current != nullptr)
+        {
+            parent = current;
+            if (value < current->value)
+            {
+                current = current->pLeft;
+            }
+            else
+            {
+                current = current->pRight;
+            }
+        }
+
+        if (value < parent->value)
+        {
+            parent->pLeft = newNode;
+        }
+        else
+        {
+            parent->pRight = newNode;
+        }
+
+        return node;
+    }
+
     /*
      * Hàm đệ quy để thêm/ADD một giá trị vào cây Nhị phân tìm kiếm
      * @param node: Nút đang xét
@@ -43,7 +106,6 @@ public:
         {
             return new Node(value); // Tạo một nút mới và trả về
         }
-
         // Nếu giá trị nhỏ hơn hoặc bằng giá trị của nút hiện tại
         if (value <= node->value)
         {
@@ -70,6 +132,110 @@ public:
         root = addRec(root, value);
     }
 
+    // Ham xoa node khong de quy
+    Node *interative_Delete(Node *node, T value)
+    {
+        Node *parent = nullptr;
+        Node *current = node;
+
+        // Tìm nút cần xóa và lưu lại cha của nó
+        while (current != nullptr && current->value != value)
+        {
+            parent = current;
+            if (value < current->value)
+            {
+                current = current->pLeft;
+            }
+            else
+            {
+                current = current->pRight;
+            }
+        }
+
+        // Nếu không tìm thấy nút cần xóa
+        if (current == nullptr)
+        {
+            return node; // Trả về cây không thay đổi
+        }
+
+        // Trường hợp 1: Nút không có con (nút lá)
+        if (current->pLeft == nullptr && current->pRight == nullptr)
+        {
+            if (current == node) // Nếu nút cần xóa là nút gốc
+            {
+                delete current; // Xóa nút
+                return nullptr; // Trả về nullptr để cập nhật con trỏ từ cha
+            }
+            else if (parent->pLeft == current)
+            {
+                parent->pLeft = nullptr; // Cập nhật con trỏ của cha
+            }
+            else
+            {
+                parent->pRight = nullptr; // Cập nhật con trỏ của cha
+            }
+        }
+        // Trường hợp 2: Nút chỉ có một con
+        else if (current->pLeft == nullptr)
+        {
+            if (current == node) // Nếu nút cần xóa là nút gốc
+            {
+                Node *temp = current->pRight; // Lưu lại con trỏ đến con bên phải
+                delete current;               // Xóa nút
+                return temp;                  // Trả về con trỏ đến con bên phải để cập nhật từ cha
+            }
+            else if (parent->pLeft == current)
+            {
+                parent->pLeft = current->pRight; // Cập nhật con trỏ của cha
+            }
+            else
+            {
+                parent->pRight = current->pRight; // Cập nhật con trỏ của cha
+            }
+        }
+        else if (current->pRight == nullptr)
+        {
+            if (current == node) // Nếu nút cần xóa là nút gốc
+            {
+                Node *temp = current->pLeft; // Lưu lại con trỏ đến con bên trái
+                delete current;              // Xóa nút
+                return temp;                 // Trả về con trỏ đến con bên trái để cập nhật từ cha
+            }
+            else if (parent->pLeft == current)
+            {
+                parent->pLeft = current->pLeft; // Cập nhật con trỏ của cha
+            }
+            else
+            {
+                parent->pRight = current->pLeft; // Cập nhật con trỏ của cha
+            }
+        }
+        // Trường hợp 3: Nút có hai con
+        else
+        {
+            // Tìm nút kế tiếp theo thứ tự inorder (nút nhỏ nhất trong cây con bên phải)
+            Node *successor = findMin(current->pRight);
+
+            // Sao chép giá trị của nút kế tiếp vào nút hiện tại
+            current->value = successor->value;
+
+            // Xóa nút kế tiếp từ vị trí ban đầu của nó
+            current->pRight = deleteNodeRec(current->pRight, successor->value);
+        }
+        // Trả về nút hiện tại sau khi đã xóa
+        return node;
+    }
+
+    Node *findMax(Node *node)
+    {
+        Node *current = node;
+        // Đi theo con trỏ bên phải cho đến khi không thể đi tiếp
+        while (current && current->pRight != nullptr)
+        {
+            current = current->pRight;
+        }
+        return current; // Trả về nút có giá trị lớn nhất
+    }
     /*
      * Tìm nút có giá trị nhỏ nhất trong cây con
      * @param node: Nút gốc của cây con
@@ -138,6 +304,15 @@ public:
             // Trường hợp 3: Nút có hai con
             else
             {
+                /*  Node *successor = findMax(node->pLeft); // Tìm nút lớn nhất trong cây con bên trái
+                  // Sao chép giá trị của nút kế tiếp vào nút hiện tại
+                  node->value = successor->value;
+                  // Xóa nút kế tiếp từ vị trí ban đầu của nó
+                  node->pLeft = deleteNodeRec(node->pLeft, successor->value);
+                 */
+
+                // Hoặc bạn có thể tìm nút nhỏ nhất trong cây con bên phải
+
                 // Tìm nút kế tiếp theo thứ tự inorder (nút nhỏ nhất trong cây con bên phải)
                 Node *successor = findMin(node->pRight);
 
